@@ -1,0 +1,58 @@
+{% extends "index.html" %}
+{% block messages %}
+            {% with messages = get_flashed_messages() %}
+
+              {% if messages %}
+                <div data-alert class="alert-box">
+                <ul class=flashes>
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+                <a href="#" class="close">&times;</a>
+                </div>
+              {% endif %}
+
+            {% endwith %}
+{% endblock %}
+{% block content %}
+
+
+            <div class="row">
+              <div class="large-6 columns">
+                  <h3>{{ game.id }}</h3>
+                  <p>
+                      {% if game.turn == side %}
+                      Please place a {{side}} on the game board.
+                      {% else %}
+                      Not your turn!
+                      {% endif %}
+                  </p>
+                  <form action="" method="post">
+                  <table border="1">
+                      <input type="hidden" name="side" value="{{side}}" />
+                      {% for row in game.board %}
+                      {% set outer_loop = loop %}
+                      <tr>
+                        {% for col in row %}
+
+                        <td class="cell">
+                            {% if col %}
+                            {{col}}
+                            {% elif game.turn == side %}
+                            <button name="coords" class="button" value="{{outer_loop.index0}},{{loop.index0}}" type="submit">{{side}}</button>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                      </tr>
+                      {% endfor %}
+                  </table>
+                  </form>
+                  {% if side == "x" %}
+                  <p><a href="{{ url_for('game', id=game.id, side='o') }}">Switch to O</a></p>
+                  {% else %}
+                  <p><a href="{{ url_for('game', id=game.id, side='x') }}">Switch to X</a></p>
+                  {% endif %}
+              </div>
+            </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TicTacToe</title>
+    <link rel="stylesheet" href="/static/css/foundation.css" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <script src="/static/js/vendor/modernizr.js"></script>
+  </head>
+  <body>
+     {% block messages %}{% endblock %}
+      <!-- Main Page Content and Sidebar -->
+      {% block content %}
+      {% for game in games %}
+      <div class="row">     
+        <!-- Main Blog Content -->
+        <div class="large-9 columns" role="content">
+          <article>
+
+            <h3>{{ game.id }}</h3>
+     
+            <div class="row">
+              <div class="large-6 columns">
+                  <table border="1">
+                      {% for row in game.board %}
+                      <tr>
+                        {% for col in row %}
+                        <td class="cell">
+                            {% if col %}
+                            {{col}}
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                      </tr>
+                      {% endfor %}
+                  </table>
+              </div>
+            </div>
+
+          </article>
+     
+          <hr />
+     
+       {% endfor %}
+       {% endblock %}
+        <!-- End Main Content -->      
+     
+  <script src="/static/js/vendor/jquery.js"></script>
+    <script src="/static/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+  
+    </body>
+</html> 

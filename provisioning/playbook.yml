@@ -23,6 +23,7 @@
         - requests
         - flask
         - Flask-SQLAlchemy
+        - Flask-Migrate
 
     - name: Create working directory at /data/code
       file: state=directory mode=0770 dest=/data/code owner=vagrant group=vagrant
