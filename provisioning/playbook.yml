@@ -1,0 +1,41 @@
+---
+- hosts: all
+  sudo: yes
+  tasks:
+
+    - name: Updates apt cache
+      apt: update_cache=true
+
+    - name: install the necessities
+      apt: pkg={{ item }} state=installed
+      with_items:
+       - vim
+       - apache2
+       - python-pip
+       - mysql-client
+       - mysql-common
+       - mysql-server
+       - python-mysqldb
+
+    - name: Install Python packages
+      pip: name={{ item }}
+      with_items:
+        - requests
+        - flask
+        - Flask-SQLAlchemy
+
+    - name: Create working directory at /data/code
+      file: state=directory mode=0770 dest=/data/code owner=vagrant group=vagrant
+
+    # set root mysql user's pw to root - This will fail if this isn't the first time running..no biggie
+    #because it is handled
+    - name: MySQL | Set the root password.
+      mysql_user: name=root password=root host=localhost login_user=root login_password=
+      ignore_errors: True
+      register: result
+      tags: mysql
+
+    - name: MySQL | Config for easy access as vagrant user
+      template: src=templates/mysql_root.my.cnf.j2 dest=/home/vagrant/.my.cnf
+      tags: mysql
+      when: result|success
