@@ -3,6 +3,7 @@
 ##Prereqs
 
     sudo apt-get install virtualbox
+    sudo apt-get install vagrant
     sudo pip install ansible
 
 ##Running
