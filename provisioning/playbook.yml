@@ -53,9 +53,3 @@
 
     - command: python /vagrant/db.py db upgrade
       when: result|success
-
-- hosts: all
-  sudo: no
-  tasks:
-    - name: start python dev server in screen
-      command: screen -dmS tictactoe python /vagrant/run.py
