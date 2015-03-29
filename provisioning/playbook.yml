@@ -9,8 +9,7 @@
     - name: install the necessities
       apt: pkg={{ item }} state=installed
       with_items:
-       - vim
-       - apache2
+       - screen
        - python-pip
        - mysql-client
        - mysql-common
@@ -40,3 +39,22 @@
       template: src=templates/mysql_root.my.cnf.j2 dest=/home/vagrant/.my.cnf
       tags: mysql
       when: result|success
+
+    - name: Create tictactoe database
+      mysql_db: name=tictactoe state=present login_user=root login_password=root
+
+    - name: Initializing database
+      command: python /vagrant/db.py db init creates=/vagrant/migrations
+
+    - command: python /vagrant/db.py db migrate
+      ignore_errors: True
+      register: result
+
+    - command: python /vagrant/db.py db upgrade
+      when: result|success
+
+- hosts: all
+  sudo: no
+  tasks:
+    - name: start python dev server in screen
+      command: screen -dmS tictactoe python /vagrant/run.py
