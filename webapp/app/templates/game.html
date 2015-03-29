@@ -20,10 +20,14 @@
 
             <div class="row">
               <div class="large-6 columns">
-                  <h3>{{ game.id }}</h3>
+                  <h3>Game #{{ game.id }}</h3>
                   <p>
-                      {% if game.turn == side %}
-                      Please place a {{side}} on the game board.
+                      {% if game.winner %}
+                      Game Over! {{game.winner}} wins.
+                      {% elif game.full %}
+                      Game Over! Tie.
+                      {% elif game.turn == side %}
+                      Please place an {{side}} on the game board.
                       {% else %}
                       Not your turn!
                       {% endif %}
@@ -39,6 +43,8 @@
                         <td class="cell">
                             {% if col %}
                             {{col}}
+                            {% elif game.winner %}
+                            &nbsp;
                             {% elif game.turn == side %}
                             <button name="coords" class="button" value="{{outer_loop.index0}},{{loop.index0}}" type="submit">{{side}}</button>
                             {% endif %}
@@ -49,10 +55,11 @@
                   </table>
                   </form>
                   {% if side == "x" %}
-                  <p><a href="{{ url_for('game', id=game.id, side='o') }}">Switch to O</a></p>
+                  <p><a href="{{ url_for('game', id=game.id, side='o') }}">Switch to O</a>
                   {% else %}
-                  <p><a href="{{ url_for('game', id=game.id, side='x') }}">Switch to X</a></p>
+                  <p><a href="{{ url_for('game', id=game.id, side='x') }}">Switch to X</a>
                   {% endif %}
+                  &nbsp;| <a href="/">Home</a></p>
               </div>
             </div>
 {% endblock %}

@@ -9,41 +9,60 @@
     <script src="/static/js/vendor/modernizr.js"></script>
   </head>
   <body>
+   <div class="row">
+
+    <div class="large-9 columns" role="content">
      {% block messages %}{% endblock %}
+     </div>
+   </div>
       <!-- Main Page Content and Sidebar -->
+
       {% block content %}
+
+   <div class="row">
+        <!-- Main Content -->
+      <div class="large-9 columns" role="content">
+          <h3>Welcome to the tictactoe home page!</h3>
+          <p>Check out the results of games or join a game below.</p>
+      <table>
+      <thead>
+      <tr>
+          <th>Game</th>
+          <th>Result</th>
+          <th>Join X</th>
+          <th>Join O</th>
+      </tr>
+      </thead>
+      <tbody>
       {% for game in games %}
-      <div class="row">     
-        <!-- Main Blog Content -->
-        <div class="large-9 columns" role="content">
-          <article>
+      <tr>
+          <td>{{game.id}}</td>
+          <td>
+          {% if game.winner %}
+              {{game.winner}} wins!
+          {% elif game.full %}
+              Tie.
+          {% else %}
+              In progress, {{game.turn}}'s turn.
+          {% endif %}
+          </td>
+          {% if not game.winner and not game.full %}
+          <td><a href="{{ url_for('game', id=game.id, side='x') }}">join x</a></td>
+          <td><a href="{{ url_for('game', id=game.id, side='o') }}">join o</a></td>
+          {% else %}
+          <td>-</td>
+          <td>-</td>
+          {% endif %}
 
-            <h3>{{ game.id }}</h3>
-     
-            <div class="row">
-              <div class="large-6 columns">
-                  <table border="1">
-                      {% for row in game.board %}
-                      <tr>
-                        {% for col in row %}
-                        <td class="cell">
-                            {% if col %}
-                            {{col}}
-                            {% endif %}
-                        </td>
-                        {% endfor %}
-                      </tr>
-                      {% endfor %}
-                  </table>
-              </div>
-            </div>
+      </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      <p>New game: <a href="{{ url_for('new', side='x') }}">join x</a> | <a href="{{ url_for('new', side='o') }}">join o</a></p>
+      </div>
+   </div>
+      {% endblock %}
 
-          </article>
-     
-          <hr />
-     
-       {% endfor %}
-       {% endblock %}
         <!-- End Main Content -->      
      
   <script src="/static/js/vendor/jquery.js"></script>
