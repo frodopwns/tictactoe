@@ -2,6 +2,10 @@ from app import db
 import json
 
 class Game(db.Model):
+    """
+    Model for Game object
+
+    """
     id = db.Column(db.Integer, primary_key=True)
     board = db.Column(db.Text)
     turn = db.Column(db.String(128))
@@ -21,16 +25,25 @@ class Game(db.Model):
                                  [None, None, None]])
 
     def serialize(self):
+        """
+        Convert game board state to json
+        """
         if not self._serial:
             self.board = json.dumps(self.board)
             self._serial = True
 
     def unserialize(self):
+        """
+        convert the board state to nested lists
+        """
         if self._serial:
             self.board = json.loads(self.board)
             self._serial = False
 
     def to_json(self):
+        """
+        Return the current state of the game in dict format
+        """
         return {
             'id': self.id,
             'board': self.board,
@@ -40,18 +53,27 @@ class Game(db.Model):
         }
 
     def make_move(self, coords, side):
+        """
+        Method for submitting moves. Keeps track of serial state
+        """
         self.unserialize()
         self.board[coords[0]][coords[1]] = side
         self.turn = "x" if side == "o" else "o"
         self._moves += 1
 
     def check_full(self):
+        """
+        Set the full state if we hit the max moves
+        """
         if self._moves == 9:
             self.full = True
 
         return self.full
 
     def check_win(self):
+        """
+        Check the rows, cols, diagonals for win scenarios.
+        """
         self.unserialize()
 
         # rows
