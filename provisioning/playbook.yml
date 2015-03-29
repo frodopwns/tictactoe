@@ -23,6 +23,7 @@
         - flask
         - Flask-SQLAlchemy
         - Flask-Migrate
+        - pytest
 
     - name: Create working directory at /data/code
       file: state=directory mode=0770 dest=/data/code owner=vagrant group=vagrant
