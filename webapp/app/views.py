@@ -46,7 +46,7 @@ def new(side):
     db.session.commit()
     return redirect(url_for('game', id=game.id, side=side))
 
-@app.route('/update', methods=['POST', 'GET'])
+@app.route('/update', methods=['POST'])
 def update():
     if request.method == 'POST':
         id = request.form['id']
@@ -58,7 +58,6 @@ def update():
             game.unserialize()
         else:
             abort(404)
-
         game.make_move([x, y], turn)
         game.check_full()
         game.check_win()
@@ -67,7 +66,7 @@ def update():
         db.session.commit()
 
 
-    return "stuff"
+    return jsonify(**{'winner': game.winner, 'full': game.full})
 
 @app.route('/ajax/<int:id>', methods=['GET'])
 def ajax(id):

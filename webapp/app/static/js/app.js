@@ -13,12 +13,8 @@ $(document).ready(function() {
                     $.ajax({
                         url: "/ajax/" + id, success: function (data) {
                             //Update your dashboard gauge
-                            console.log(data);
-                            if (data.turn == side) {
-                                turn = data.turn;
-                                rebuild(data);
-                                console.log("shit");
-                            }
+                            console.log("turn " + data.turn + " side " + side);
+
                         }, dataType: "json"
                     });
                 }, 3000);
@@ -39,11 +35,17 @@ $(document).ready(function() {
         if (turn == side && cellValue == '') {
             $(this).html(turn);
             $.post( "/update", { id: gameId, turn: turn, loc: $(this).attr('id').slice(5) } ).done(function( data ) {
-                    console.log( "Data Loaded: " + data);
+                    console.log(data);
+                    if (data.winner) {
+                        $(".data").html("Game Over! " + data.winner + " wins.");
+                    } else if (data.full) {
+                        $(".data").html("Game Over! Tie.");
+                    }
                 });
 
             $(".cell").css("cursor", "default");
-            waitTurn(gameId);
+            $(".data").html("Not your turn!");
+            //waitTurn(gameId);
         }
 
     });
