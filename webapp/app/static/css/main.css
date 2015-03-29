@@ -6,7 +6,6 @@
     vertical-align: center;
     text-transform: uppercase;
 }
-
-.cell button {
-    font: 90px sans-serif;
+.hover {
+    background-color: lightgrey;
 }

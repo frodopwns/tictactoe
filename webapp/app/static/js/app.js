@@ -24,6 +24,7 @@ $(document).ready(function() {
                         $(".cell").css("cursor", "default");
                     }
                 });
+            $(this).removeClass("hover");
             //flip turn to next player
             turn = (turn == 'x') ? 'o': 'x';
             side = turn;
@@ -34,4 +35,17 @@ $(document).ready(function() {
         }
     });
 
+    $( "td.cell" ).hover(
+        function() {
+            if ($(this).html().trim() == '') {
+                $(this).addClass("hover");
+            } else {
+                $(this).css("cursor", "default");
+            }
+        }, function() {
+            if ($(this).html().trim() == '') {
+                $(this).removeClass("hover");
+            }
+        }
+    );
 });
