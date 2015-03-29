@@ -22,8 +22,10 @@
    <div class="row">
         <!-- Main Content -->
       <div class="large-9 columns" role="content">
-          <h3>Welcome to the tictactoe home page!</h3>
-          <p>Check out the results of games or join a game below.</p>
+
+      <h3>Welcome to the tictactoe home page!</h3>
+      {% if games %}
+      <p>Check out the results of games or join a game below.</p>
       <table>
       <thead>
       <tr>
@@ -58,8 +60,10 @@
       {% endfor %}
       </tbody>
       </table>
+      {% endif %}
       <p>New game: <a href="{{ url_for('new', side='x') }}">join x</a> | <a href="{{ url_for('new', side='o') }}">join o</a></p>
       </div>
+
    </div>
       {% endblock %}
 
