@@ -66,7 +66,7 @@ def update():
         db.session.commit()
 
 
-    return jsonify(**{'winner': game.winner, 'full': game.full})
+    return jsonify(**game.to_json())
 
 @app.route('/ajax/<int:id>', methods=['GET'])
 def ajax(id):

@@ -1,59 +1,35 @@
 $(document).ready(function() {
 
-    rebuild = function(game) {
-        console.log("in the rebuild");
-        console.log(game);
-        if (game.winner) {
-            console.log("winner");
-            $(".data").html("Game Over! " + game.winner + " wins.");
-        } else if (game.full) {
-            $(".data").html("Game Over! Tie.");
-        } else if (game.turn == side) {
-            $(".data").html("Please place an " + side + " on the game board..");
-            $(".cell").css("cursor", "pointer");
-        }
-    }
-
-    waitTurn = function(id) {
-            setTimeout(function() {
-                setInterval(function () {
-                    $.ajax({
-                        url: "/ajax/" + id, success: function (data) {
-
-                            if (side == data.turn) {
-                                rebuild(data);
-                            }
-                        }, dataType: "json"
-                    });
-                }, 3000);
-            }, 3000);
-
-
-    }
-
-    if (turn != side) {
-        $(".cell").css("cursor", "default");
-    } else {
-        $(".cell").css("cursor", "pointer");
-    }
     $(".cell").click(function() {
 
         var cellValue = $(this).html().trim();
         console.log(cellValue);
-        if (turn == side && cellValue == '') {
+        console.log("turn " + turn + " side " + side);
+        console.log(over);
+
+        if (turn == side && cellValue == '' && over != true) {
             $(this).html(turn);
             $.post( "/update", { id: gameId, turn: turn, loc: $(this).attr('id').slice(5) } ).done(function( data ) {
                     console.log(data);
                     if (data.winner) {
                         $(".data").html("Game Over! " + data.winner + " wins.");
+                        over = true;
                     } else if (data.full) {
                         $(".data").html("Game Over! Tie.");
+                        over = true;
+                    }
+                    if (over == true) {
+                        $(".cell").css("cursor", "default");
                     }
                 });
+            $("input[name='" + turn + "']").prop("checked", false)
+            turn = (turn == 'x') ? 'o': 'x';
+            side = turn;
+            $("#turn").html(turn);
+            $("input[name='" + turn + "']").prop("checked", true)
 
-            $(".cell").css("cursor", "default");
-            $(".data").html("Not your turn!");
-            //waitTurn(gameId);
+            $(".data").html("Please place an " + side + " on the game board.");
+
         }
 
     });
