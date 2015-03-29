@@ -25,4 +25,4 @@ To run the app manually:
 
 ##Info
 
-The master branch contains Ajax version of game.  Check the noajax branch for a version without javascript.
+The master branch contains the Ajax version of the game.  Check the noajax branch for a version without javascript.
