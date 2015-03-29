@@ -1,4 +1,4 @@
-from flask import render_template, request,flash, redirect, url_for, abort, jsonify
+from flask import render_template, request, redirect, url_for, abort, jsonify
 from app import app, db
 from app.models import Game
 
@@ -21,30 +21,19 @@ def game(id, side):
         choice = map(int, request.form['coords'].split(","))
         side = request.form['side']
         if game.turn == side:
-
             game.make_move(choice, side)
-            if game.check_win():
-                flash("winner!")
-            elif game.check_full():
-                flash("game over with tie!")
-
+            game.check_win()
+            game.check_full()
             game.serialize()
             db.session.add(game)
             db.session.commit()
             game.unserialize()
-            flash("game updated")
+
             return redirect(url_for("game", id=game.id, side=side))
 
 
     return render_template('game.html', game=game, side=side)
 
-
-@app.route('/new/<side>')
-def new(side):
-    game = Game()
-    db.session.add(game)
-    db.session.commit()
-    return redirect(url_for('game', id=game.id, side=side))
 
 @app.route('/update', methods=['POST'])
 def update():
@@ -65,17 +54,15 @@ def update():
         db.session.add(game)
         db.session.commit()
 
-
     return jsonify(**game.to_json())
 
-@app.route('/ajax/<int:id>', methods=['GET'])
-def ajax(id):
-    game = Game.query.get(id)
 
-    if game:
-        game.unserialize()
-
-    return jsonify(**game.to_json())
+@app.route('/new/<side>')
+def new(side):
+    game = Game()
+    db.session.add(game)
+    db.session.commit()
+    return redirect(url_for('game', id=game.id, side=side))
 
 
 @app.route('/' )

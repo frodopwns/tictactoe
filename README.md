@@ -22,3 +22,7 @@ To run the app manually:
 
     vagrant ssh #if not already logged into VM
     python /vagrant/run.py
+
+##Info
+
+The master branch contains Ajax version of game.  Check the noajax branch for a version without javascript.

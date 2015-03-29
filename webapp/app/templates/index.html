@@ -9,12 +9,7 @@
     <script src="/static/js/vendor/modernizr.js"></script>
   </head>
   <body>
-   <div class="row">
 
-    <div class="large-9 columns" role="content">
-     {% block messages %}{% endblock %}
-     </div>
-   </div>
       <!-- Main Page Content and Sidebar -->
 
       {% block content %}
@@ -26,7 +21,7 @@
       <h3>Welcome to the tictactoe home page!</h3>
       {% if games %}
       <p>Check out the results of games or join a game below.</p>
-      <table>
+      <table width="100%">
       <thead>
       <tr>
           <th>Game</th>
