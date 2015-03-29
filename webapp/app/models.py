@@ -30,6 +30,15 @@ class Game(db.Model):
             self.board = json.loads(self.board)
             self._serial = False
 
+    def to_json(self):
+        return {
+            'id': self.id,
+            'board': self.board,
+            'turn': self.turn,
+            'winner': self.winner,
+            'full': self.full,
+        }
+
     def make_move(self, coords, side):
         self.unserialize()
         self.board[coords[0]][coords[1]] = side
@@ -47,21 +56,21 @@ class Game(db.Model):
         # rows
         if self.board[0][0] == self.board[0][1] == self.board[0][2]:
             self.winner = self.board[0][0]
-        elif self.board[1][0] == self.board[1][1] == self.board[1][2]:
+        if self.board[1][0] == self.board[1][1] == self.board[1][2]:
             self.winner = self.board[1][0]
-        elif self.board[2][0] == self.board[2][1] == self.board[2][2]:
+        if self.board[2][0] == self.board[2][1] == self.board[2][2]:
             self.winner = self.board[2][0]
         # cols
         if self.board[0][0] == self.board[1][0] == self.board[2][0]:
             self.winner = self.board[0][0]
-        elif self.board[0][1] == self.board[1][1] == self.board[2][1]:
+        if self.board[0][1] == self.board[1][1] == self.board[2][1]:
             self.winner = self.board[0][1]
-        elif self.board[0][2] == self.board[1][2] == self.board[2][2]:
+        if self.board[0][2] == self.board[1][2] == self.board[2][2]:
             self.winner = self.board[0][2]
         # diagonals
         if self.board[0][0] == self.board[1][1] == self.board[2][2]:
             self.winner = self.board[0][0]
-        elif self.board[0][2] == self.board[1][1] == self.board[2][0]:
+        if self.board[0][2] == self.board[1][1] == self.board[2][0]:
             self.winner = self.board[0][2]
 
         if self.winner:

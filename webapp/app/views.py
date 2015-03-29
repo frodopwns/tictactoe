@@ -1,4 +1,4 @@
-from flask import render_template, request,flash, redirect, url_for, abort
+from flask import render_template, request,flash, redirect, url_for, abort, jsonify
 from app import app, db
 from app.models import Game
 
@@ -18,7 +18,6 @@ def game(id, side):
         abort(404)
 
     if request.method == 'POST':
-        print request.form
         choice = map(int, request.form['coords'].split(","))
         side = request.form['side']
         if game.turn == side:
@@ -46,6 +45,38 @@ def new(side):
     db.session.add(game)
     db.session.commit()
     return redirect(url_for('game', id=game.id, side=side))
+
+@app.route('/update', methods=['POST', 'GET'])
+def update():
+    if request.method == 'POST':
+        id = request.form['id']
+        turn = request.form['turn']
+        x, y = int(request.form['loc'][0]), int(request.form['loc'][1])
+        game = Game.query.get(id)
+
+        if game:
+            game.unserialize()
+        else:
+            abort(404)
+
+        game.make_move([x, y], turn)
+        game.check_full()
+        game.check_win()
+        game.serialize()
+        db.session.add(game)
+        db.session.commit()
+
+
+    return "stuff"
+
+@app.route('/ajax/<int:id>', methods=['GET'])
+def ajax(id):
+    game = Game.query.get(id)
+
+    if game:
+        game.unserialize()
+
+    return jsonify(**game.to_json())
 
 
 @app.route('/' )

@@ -16,12 +16,19 @@
             {% endwith %}
 {% endblock %}
 {% block content %}
+            <script>
+                var turn = '{{game.turn}}';
+                var side = '{{side}}';
+                var gameId = {{game.id}};
+                var board = {{game.board|tojson}};
 
+            </script>
 
             <div class="row">
               <div class="large-6 columns">
+                  <article>
                   <h3>Game #{{ game.id }}</h3>
-                  <p>
+                  <p class="data">
                       {% if game.winner %}
                       Game Over! {{game.winner}} wins.
                       {% elif game.full %}
@@ -40,13 +47,9 @@
                       <tr>
                         {% for col in row %}
 
-                        <td class="cell">
+                        <td class="cell" id="cell_{{outer_loop.index0}}{{loop.index0}}">
                             {% if col %}
                             {{col}}
-                            {% elif game.winner %}
-                            &nbsp;
-                            {% elif game.turn == side %}
-                            <button name="coords" class="button" value="{{outer_loop.index0}},{{loop.index0}}" type="submit">{{side}}</button>
                             {% endif %}
                         </td>
                         {% endfor %}
@@ -60,6 +63,7 @@
                   <p><a href="{{ url_for('game', id=game.id, side='x') }}">Switch to X</a>
                   {% endif %}
                   &nbsp;| <a href="/">Home</a></p>
+                  </article>
               </div>
             </div>
 {% endblock %}
