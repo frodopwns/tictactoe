@@ -2,19 +2,27 @@ $(document).ready(function() {
 
     rebuild = function(game) {
         console.log("in the rebuild");
+        console.log(game);
+        if (game.winner) {
+            console.log("winner");
+            $(".data").html("Game Over! " + game.winner + " wins.");
+        } else if (game.full) {
+            $(".data").html("Game Over! Tie.");
+        } else if (game.turn == side) {
+            $(".data").html("Please place an " + side + " on the game board..");
+            $(".cell").css("cursor", "pointer");
+        }
     }
 
     waitTurn = function(id) {
-            console.log("turn");
-            console.log(turn);
-            console.log(side);
             setTimeout(function() {
                 setInterval(function () {
                     $.ajax({
                         url: "/ajax/" + id, success: function (data) {
-                            //Update your dashboard gauge
-                            console.log("turn " + data.turn + " side " + side);
 
+                            if (side == data.turn) {
+                                rebuild(data);
+                            }
                         }, dataType: "json"
                     });
                 }, 3000);

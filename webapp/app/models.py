@@ -53,24 +53,25 @@ class Game(db.Model):
 
     def check_win(self):
         self.unserialize()
+
         # rows
-        if self.board[0][0] == self.board[0][1] == self.board[0][2]:
+        if self.board[0][0] and self.board[0][0] == self.board[0][1] == self.board[0][2]:
             self.winner = self.board[0][0]
-        if self.board[1][0] == self.board[1][1] == self.board[1][2]:
+        if self.board[1][0] and self.board[1][0] == self.board[1][1] == self.board[1][2]:
             self.winner = self.board[1][0]
-        if self.board[2][0] == self.board[2][1] == self.board[2][2]:
+        if self.board[2][0] and self.board[2][0] == self.board[2][1] == self.board[2][2]:
             self.winner = self.board[2][0]
         # cols
-        if self.board[0][0] == self.board[1][0] == self.board[2][0]:
+        if self.board[0][0] and self.board[0][0] == self.board[1][0] == self.board[2][0]:
             self.winner = self.board[0][0]
-        if self.board[0][1] == self.board[1][1] == self.board[2][1]:
+        if self.board[0][1] and self.board[0][1] == self.board[1][1] == self.board[2][1]:
             self.winner = self.board[0][1]
-        if self.board[0][2] == self.board[1][2] == self.board[2][2]:
+        if self.board[0][2] and self.board[0][2] == self.board[1][2] == self.board[2][2]:
             self.winner = self.board[0][2]
         # diagonals
-        if self.board[0][0] == self.board[1][1] == self.board[2][2]:
+        if self.board[0][0] and self.board[0][0] == self.board[1][1] == self.board[2][2]:
             self.winner = self.board[0][0]
-        if self.board[0][2] == self.board[1][1] == self.board[2][0]:
+        if self.board[0][2] and self.board[0][2] == self.board[1][1] == self.board[2][0]:
             self.winner = self.board[0][2]
 
         if self.winner:
