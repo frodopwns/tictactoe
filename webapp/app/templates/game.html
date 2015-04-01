@@ -44,7 +44,7 @@
 {% block javascript %}
 <script>
     var turn = '{{game.turn}}';
-    var side = '{{game.turn}}';
+    var side = '{{side}}';
     {% if game.winner or game.full %}
     var over = true;
     {% else %}
@@ -57,6 +57,28 @@
     }
     var gameId = {{game.id}};
     var board = {{game.board|tojson}};
+
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
+        socket.on('my response', function(msg) {
+            console.log(msg.data);
+            $('#' + msg.data.el).html(msg.data.turn);
+            turn = (msg.data.turn == 'x') ? 'o': 'x';
+            if (msg.data.winner) {
+                $(".data").html("Game Over! " + msg.data.winner + " wins.");
+                over = true;
+            } else if (msg.data.full) {
+                $(".data").html("Game Over! Tie.");
+                over = true;
+            }
+            //set pointer to default if game over
+            if (over == true) {
+                $(".cell").css("cursor", "default");
+            }
+            $("#turn").html(turn);
+            //update instructions
+            $(".data").html("Please place an " + side + " on the game board.");
+        });
+    console.log(side);
 
 </script>
 {% endblock %}

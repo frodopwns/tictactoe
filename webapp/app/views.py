@@ -1,6 +1,20 @@
 from flask import render_template, request, redirect, url_for, abort, jsonify
-from app import app, db
+from flask.ext.socketio import emit
+from app import app, db, socketio
 from app.models import Game
+
+
+@socketio.on('my broadcast event', namespace='/test')
+def test_message(message):
+    emit('my response', {'data': message['data']}, broadcast=True)
+
+@socketio.on('connect', namespace='/test')
+def test_connect():
+    print('Client connected')
+
+@socketio.on('disconnect', namespace='/test')
+def test_disconnect():
+    print('Client disconnected')
 
 
 @app.route('/game/<int:id>/join/<side>', methods=['GET'])

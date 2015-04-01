@@ -11,6 +11,8 @@
       with_items:
        - screen
        - python-pip
+       - python-dev
+       - libevent-dev
        - mysql-client
        - mysql-common
        - mysql-server
@@ -23,6 +25,7 @@
         - flask
         - Flask-SQLAlchemy
         - Flask-Migrate
+        - flask-socketio
         - pytest
 
     - name: Create working directory at /data/code
