@@ -35,7 +35,12 @@
                   </table>
                   </form>
 
-                  <a class="button" href="/">Home</a></p>
+                      {% if side == "x" %}
+                      <p><a class="button" href="{{ url_for('game', id=game.id, side='o') }}">Switch to O</a>
+                          {% else %}
+                      <p><a class="button" href="{{ url_for('game', id=game.id, side='x') }}">Switch to X</a>
+                          {% endif %}
+                          &nbsp; <a class="button" href="/">Home</a></p>
                   </article>
               </div>
             </div>
@@ -60,23 +65,28 @@
 
         var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
         socket.on('my response', function(msg) {
-            console.log(msg.data);
-            $('#' + msg.data.el).html(msg.data.turn);
-            turn = (msg.data.turn == 'x') ? 'o': 'x';
-            if (msg.data.winner) {
-                $(".data").html("Game Over! " + msg.data.winner + " wins.");
-                over = true;
-            } else if (msg.data.full) {
-                $(".data").html("Game Over! Tie.");
-                over = true;
+            console.log(gameId);
+            if (msg.data.id == gameId) {
+                $('#' + msg.data.el).html(msg.data.turn);
+                turn = (msg.data.turn == 'x') ? 'o' : 'x';
+                if (msg.data.winner) {
+                    console.log("WINNER WINNER");
+                    $(".data").html("Game Over! " + msg.data.winner + " wins.");
+                    over = true;
+                } else if (msg.data.full) {
+                    $(".data").html("Game Over! Tie.");
+                    over = true;
+                } else if (side == turn) {
+                    $(".data").html("Please place an " + side + " on the game board.");
+                }
+                //set pointer to default if game over
+                if (over == true) {
+                    $(".cell").css("cursor", "default");
+                }
+                $("#turn").html(turn);
+                //update instructions
             }
-            //set pointer to default if game over
-            if (over == true) {
-                $(".cell").css("cursor", "default");
-            }
-            $("#turn").html(turn);
-            //update instructions
-            $(".data").html("Please place an " + side + " on the game board.");
+
         });
     console.log(side);
 

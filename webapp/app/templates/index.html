@@ -26,7 +26,8 @@
       <tr>
           <th>Game</th>
           <th>Result</th>
-          <th>Join</th>
+          <th>Join X</th>
+          <th>Join O</th>
       </tr>
       </thead>
       <tbody>
@@ -43,10 +44,13 @@
           {% endif %}
           </td>
           {% if not game.winner and not game.full %}
-          <td><a href="{{ url_for('game', id=game.id, side='x') }}">join</a></td>
+          <td><a href="{{ url_for('game', id=game.id, side='x') }}">join x</a></td>
+          <td><a href="{{ url_for('game', id=game.id, side='o') }}">join o</a></td>
           {% else %}
           <td><a href="{{ url_for('game', id=game.id, side='x') }}">view</a></td>
+          <td><a href="{{ url_for('game', id=game.id, side='o') }}">view</a></td>
           {% endif %}
+
 
       </tr>
       {% endfor %}

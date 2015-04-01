@@ -6,33 +6,30 @@ $(document).ready(function() {
         //been chosen by a player
 
         var cellValue = $(this).html().trim();
-        console.log(turn);
-        console.log(side);
-        console.log(cellValue);
-        console.log(over);
+
         //if the cell hasn't been filled and the game is not over we can make the move
         if (cellValue == '' && over != true && turn == side) {
-            console.log('inside');
             var elid = $(this).attr('id');
-            var winner = '';
-            var full = '';
+            var loc = $(this).attr('id').slice(5);
             //post clicked position to server to update the db
-            $.post( "/update", { id: gameId, turn: turn, loc: $(this).attr('id').slice(5) } ).done(function( data ) {
+            $.post( "/update", { id: gameId, turn: turn, loc: loc } ).done(
+                function( data, loc ) {
                     //handle win or tie scenarios
-                winner = data.winner;
-                full = data.full;
-
+                    var winner = data.winner;
+                    var full = data.full;
+                    //flip turn to next player
+                    socket.emit('my broadcast event', {data: {
+                        el: elid,
+                        id: gameId,
+                        turn: turn,
+                        loc: loc,
+                        winner: winner,
+                        full: full,}
+                    });
                 });
+
             $(this).removeClass("hover");
-            //flip turn to next player
-            socket.emit('my broadcast event', {data: {
-                el: elid,
-                id: gameId,
-                turn: turn,
-                loc: $(this).attr('id').slice(5) },
-                winner: winner,
-                full: full,
-            });
+
 
         }
     });
